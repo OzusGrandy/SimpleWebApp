@@ -1,0 +1,20 @@
+﻿{
+  "profiles": {
+    "SimpleWebApp.Api (dev)": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "SimpleWebApp.Api (prod)": {
+        "commandName": "Project",
+        "launchBrowser": false,
+        "applicationUrl": "http://localhost:5000",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Production"
+        }
+      }
+    }
+  }
+}
