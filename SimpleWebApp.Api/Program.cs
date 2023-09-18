@@ -1,6 +1,5 @@
 using SimpleWebApp.Api.Models;
 using SimpleWebApp.Storage;
-using Microsoft.AspNetCore.Mvc;
 using SimpleWebApp.BusinessLogic;
 using SimpleWebApp.Middleware;
 
