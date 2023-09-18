@@ -14,6 +14,7 @@ namespace SimpleWebApp.Api
 
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapper(typeof(MapperProfile));
             builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddConsole().SetMinimumLevel(LogLevel.Debug));
             builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddTransient<EmployeeManager>();
