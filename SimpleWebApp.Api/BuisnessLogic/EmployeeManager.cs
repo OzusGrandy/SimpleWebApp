@@ -5,42 +5,28 @@ using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EmployeeModels;
 using SimpleWebApp.Storage;
 using FluentValidation;
+using AutoMapper;
 
 namespace SimpleWebApp.Api.BuisnessLogic
 {
     public class EmployeeManager
     {
         private readonly ValidationOptions _validationOptions;
+        private readonly IMapper _mapper;
         private IEmployeeRepository _storage;
 
-        public EmployeeManager(IEmployeeRepository storage, IOptions<ValidationOptions> validationOptions)
+        public EmployeeManager(IEmployeeRepository storage, IOptions<ValidationOptions> validationOptions, IMapper mapper)
         {
             _storage = storage;
             _validationOptions = validationOptions.Value;
+            _mapper = mapper;
         }
 
         public EmployeeDto Add(EmployeeCreateDto createDto)
         {
             new EmployeeChangeDto.Validator(_validationOptions).ValidateAndThrow(createDto);
 
-            var employee = new EmployeeCreate
-            {
-                Birthday = createDto.Birthday,
-                FirstName = createDto.FirstName,
-                LastName = createDto.LastName
-            };
-
-            var result = _storage.Add(employee);
-
-            return new EmployeeDto
-            {
-                Id = result.Id,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
-                Birthday = result.Birthday,
-                CreatedAt = result.CreatedAt,
-                UpdatedAt = result.UpdatedAt
-            };
+            return _mapper.Map<EmployeeDto>(_storage.Add(_mapper.Map<EmployeeCreate>(createDto)));
         }
 
         public void Delete(Guid id)
@@ -55,54 +41,19 @@ namespace SimpleWebApp.Api.BuisnessLogic
             {
                 throw new NoFoundException();
             }
-            var result = new EmployeeDto
-            {
-                Id = id,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Birthday = employee.Birthday,
-                CreatedAt = employee.CreatedAt,
-                UpdatedAt = employee.UpdatedAt
-            };
-            return result;
+            return _mapper.Map<EmployeeDto>(employee);
         }
 
         public EmployeeDto Update(EmployeeUpdateDto model)
         {
             new EmployeeChangeDto.Validator(_validationOptions).ValidateAndThrow(model);
 
-            var employee = new EmployeeUpdate
-            {
-                Id = model.Id,
-                Birthday = model.Birthday,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
-
-            var result = _storage.Update(employee);
-
-            return new EmployeeDto
-            {
-                Id = result.Id,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
-                Birthday = result.Birthday,
-                CreatedAt = result.CreatedAt,
-                UpdatedAt = result.UpdatedAt
-            };
+            return _mapper.Map<EmployeeDto>(_storage.Update(_mapper.Map<EmployeeUpdate>(model)));
         }
 
         public PagingResult<EmployeeDto> GetPage(GetEmployeePageDto getPage)
         {
-            var employeePage = new EmployeePage
-            {
-                Page = getPage.Page,
-                PageConunt = getPage.PageConunt,
-                SortBy = getPage.SortBy,
-                SortDirection = getPage.SortDirection
-            };
-
-            var result = _storage.GetPage(employeePage);
+            var result = _storage.GetPage(_mapper.Map<EmployeePage>(getPage));
 
             return new PagingResult<EmployeeDto>(result.Items.Select(x => new EmployeeDto
             {
