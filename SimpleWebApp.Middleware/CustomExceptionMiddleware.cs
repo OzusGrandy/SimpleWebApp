@@ -1,7 +1,8 @@
-﻿using SimpleWebApp.Api.CustomExceptions;
+﻿using Microsoft.AspNetCore.Http;
+using SimpleWebApp.Middleware.CustomExceptions;
 using System.Net;
 
-namespace SimpleWebApp.Api.Middleware
+namespace SimpleWebApp.Middleware
 {
     public class CustomExceptionMiddleware
     {

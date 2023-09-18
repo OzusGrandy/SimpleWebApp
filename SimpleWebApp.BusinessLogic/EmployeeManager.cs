@@ -1,19 +1,19 @@
-﻿using Microsoft.Extensions.Options;
-using SimpleWebApp.Api.CustomExceptions;
-using SimpleWebApp.Api.Models;
-using SimpleWebApp.CommonModels;
-using SimpleWebApp.Storage.EmployeeModels;
-using SimpleWebApp.Storage;
+﻿using AutoMapper;
 using FluentValidation;
-using AutoMapper;
+using Microsoft.Extensions.Options;
+using SimpleWebApp.BusinessLogic.Models;
+using SimpleWebApp.CommonModels;
+using SimpleWebApp.Middleware.CustomExceptions;
+using SimpleWebApp.Storage;
+using SimpleWebApp.Storage.EmployeeModels;
 
-namespace SimpleWebApp.Api.BuisnessLogic
+namespace SimpleWebApp.BusinessLogic
 {
     public class EmployeeManager
     {
         private readonly ValidationOptions _validationOptions;
         private readonly IMapper _mapper;
-        private IEmployeeRepository _storage;
+        private readonly IEmployeeRepository _storage;
 
         public EmployeeManager(IEmployeeRepository storage, IOptions<ValidationOptions> validationOptions, IMapper mapper)
         {

@@ -24,7 +24,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\SimpleWebApp.BusinessLogic\SimpleWebApp.BusinessLogic.csproj" />
 	  <ProjectReference Include="..\SimpleWebApp.CommonModels\SimpleWebApp.CommonModels.csproj" />
+	  <ProjectReference Include="..\SimpleWebApp.Middleware\SimpleWebApp.Middleware.csproj" />
 	  <ProjectReference Include="..\SimpleWebApp.Storage\SimpleWebApp.Storage.csproj" />
 	</ItemGroup>
 

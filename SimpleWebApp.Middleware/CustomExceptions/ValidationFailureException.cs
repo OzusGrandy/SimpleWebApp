@@ -1,6 +1,4 @@
-﻿using SimpleWebApp.Api.Middleware;
-
-namespace SimpleWebApp.Api.CustomExceptions
+﻿namespace SimpleWebApp.Middleware.CustomExceptions
 {
     public class ValidationFailureException : Exception
     {

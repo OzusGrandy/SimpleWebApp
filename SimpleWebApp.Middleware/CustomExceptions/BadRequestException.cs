@@ -1,4 +1,4 @@
-﻿namespace SimpleWebApp.Api.CustomExceptions
+﻿namespace SimpleWebApp.Middleware.CustomExceptions
 {
     public class BadRequestExcepion : Exception
     {

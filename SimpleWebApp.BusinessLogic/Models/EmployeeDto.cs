@@ -1,4 +1,4 @@
-﻿namespace SimpleWebApp.Api.Models
+﻿namespace SimpleWebApp.BusinessLogic.Models
 {
     public class EmployeeDto
     {

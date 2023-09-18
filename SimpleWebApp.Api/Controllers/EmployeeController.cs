@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SimpleWebApp.Api.BuisnessLogic;
-using SimpleWebApp.Api.Models;
+using SimpleWebApp.BusinessLogic;
+using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.CommonModels;
 
 namespace SimpleWebApp.Api.Controllers

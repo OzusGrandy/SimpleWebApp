@@ -1,4 +1,4 @@
-﻿namespace SimpleWebApp.Api
+﻿namespace SimpleWebApp.BusinessLogic
 {
     public class ValidationOptions
     {

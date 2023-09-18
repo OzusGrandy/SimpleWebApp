@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 
-namespace SimpleWebApp.Api.Middleware
+namespace SimpleWebApp.Middleware
 {
     public class ErrorDetails
     {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using SimpleWebApp.Api.Models;
+using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.Storage.EmployeeModels;
 
-namespace SimpleWebApp.Api
+namespace SimpleWebApp.BusinessLogic
 {
     public class MapperProfile : Profile
     {

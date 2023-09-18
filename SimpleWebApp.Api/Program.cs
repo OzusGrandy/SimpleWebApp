@@ -1,8 +1,8 @@
-using SimpleWebApp.Api.BuisnessLogic;
-using SimpleWebApp.Api.Middleware;
 using SimpleWebApp.Api.Models;
 using SimpleWebApp.Storage;
 using Microsoft.AspNetCore.Mvc;
+using SimpleWebApp.BusinessLogic;
+using SimpleWebApp.Middleware;
 
 namespace SimpleWebApp.Api
 {
