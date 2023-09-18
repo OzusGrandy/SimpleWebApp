@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleWebApp.Storage.EmployeeModels;
-using Microsoft.Extensions.Options;
 
 namespace SimpleWebApp.Storage
 {
