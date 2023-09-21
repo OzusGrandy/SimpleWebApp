@@ -7,7 +7,7 @@ namespace SimpleWebApp.Storage
     {
         private readonly DatabaseConnectionOptions _connectionOptions;
 
-        public DbSet<DatabaseEmployee> employee => Set<DatabaseEmployee>();
+        public DbSet<DatabaseEmployee> Employee => Set<DatabaseEmployee>();
 
         public DatabaseContext(DatabaseConnectionOptions connectionOptions)
         {

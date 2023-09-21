@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EmployeeModels;
+using System.Linq;
 
 
 namespace SimpleWebApp.Storage
@@ -28,7 +29,7 @@ namespace SimpleWebApp.Storage
                     CreatedAt = currentDate,
                     UpdatedAt = currentDate
                 };
-                db.employee.Add(ConvertToDatabaseEmployee(employee));
+                db.Employee.Add(ConvertToDatabaseEmployee(employee));
                 db.SaveChanges();
                 return employee;
             }
@@ -38,7 +39,7 @@ namespace SimpleWebApp.Storage
         {
             using (DatabaseContext db = new DatabaseContext(_options))
             {
-                db.employee.Remove(ConvertToDatabaseEmployee(Get(id)));
+                db.Employee.Remove(ConvertToDatabaseEmployee(Get(id)));
                 db.SaveChanges();
             }
         }
@@ -47,7 +48,7 @@ namespace SimpleWebApp.Storage
         {
             using (DatabaseContext db = new DatabaseContext(_options))
             {
-                return ConvertToEmployee(db.employee.Find(id.ToString()));
+                return ConvertToEmployee(db.Employee.Find(id.ToString()));
             }
         }
 
@@ -64,7 +65,7 @@ namespace SimpleWebApp.Storage
                 existingEmployee.Birthday = model.Birthday;
                 existingEmployee.UpdatedAt = currentDate;
 
-                db.employee.Update(ConvertToDatabaseEmployee(existingEmployee));
+                db.Employee.Update(ConvertToDatabaseEmployee(existingEmployee));
                 db.SaveChanges();
 
                 return existingEmployee;
@@ -81,14 +82,14 @@ namespace SimpleWebApp.Storage
 
             using (DatabaseContext db = new DatabaseContext(_options))
             {
-                var databaseEmployeeList = db.employee.FromSqlRaw($"SELECT * FROM employee ORDER BY {sortingType} {sortDirectionTypeString} LIMIT {limit} OFFSET {offset}").ToList();
+                var list = db.Employee.AsQueryable().OrderBy(x => x.CreatedAt).Skip(offset).Take(limit).ToList();
 
-                foreach (var employee in databaseEmployeeList)
+                foreach (var employee in list)
                 {
                     resultList.Add(ConvertToEmployee(employee));
                 }
 
-                var totalCount = db.employee.Count();
+                var totalCount = db.Employee.Count();
 
                 return new PagingResult<Employee>(resultList, totalCount);
             }
