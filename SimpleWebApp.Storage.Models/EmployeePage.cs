@@ -1,6 +1,6 @@
 ﻿using SimpleWebApp.CommonModels;
 
-namespace SimpleWebApp.Storage.EmployeeModels
+namespace SimpleWebApp.Storage.Models
 {
     public class EmployeePage
     {

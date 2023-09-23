@@ -14,6 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleWebApp.CommonModels\SimpleWebApp.CommonModels.csproj" />
     <ProjectReference Include="..\SimpleWebApp.Middleware\SimpleWebApp.Middleware.csproj" />
+    <ProjectReference Include="..\SimpleWebApp.Storage.EntityFramework\SimpleWebApp.Storage.EntityFramework.csproj" />
+    <ProjectReference Include="..\SimpleWebApp.Storage.Models\SimpleWebApp.Storage.Models.csproj" />
     <ProjectReference Include="..\SimpleWebApp.Storage\SimpleWebApp.Storage.csproj" />
   </ItemGroup>
 

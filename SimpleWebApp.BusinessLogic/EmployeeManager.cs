@@ -3,8 +3,8 @@ using Microsoft.Extensions.Options;
 using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Middleware.CustomExceptions;
-using SimpleWebApp.Storage;
-using SimpleWebApp.Storage.EmployeeModels;
+using SimpleWebApp.Storage.EntityFramework;
+using SimpleWebApp.Storage.Models;
 
 namespace SimpleWebApp.BusinessLogic
 {

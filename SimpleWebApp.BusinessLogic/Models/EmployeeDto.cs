@@ -1,4 +1,4 @@
-﻿using SimpleWebApp.Storage.EmployeeModels;
+﻿using SimpleWebApp.Storage.Models;
 
 namespace SimpleWebApp.BusinessLogic.Models
 {

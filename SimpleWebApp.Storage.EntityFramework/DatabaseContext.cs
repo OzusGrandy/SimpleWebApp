@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.Storage.EmployeeModels;
+using SimpleWebApp.Storage.Models;
 
-namespace SimpleWebApp.Storage
+namespace SimpleWebApp.Storage.EntityFramework
 {
     public class DatabaseContext : DbContext
     {

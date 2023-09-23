@@ -9,9 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWebApp.CommonModels",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWebApp.Storage", "SimpleWebApp.Storage\SimpleWebApp.Storage.csproj", "{537191F5-9294-42F4-B834-05EC71FB07D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebApp.BusinessLogic", "SimpleWebApp.BusinessLogic\SimpleWebApp.BusinessLogic.csproj", "{ACB15202-20B5-4580-8FDF-63E8FB15F98E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWebApp.BusinessLogic", "SimpleWebApp.BusinessLogic\SimpleWebApp.BusinessLogic.csproj", "{ACB15202-20B5-4580-8FDF-63E8FB15F98E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebApp.Middleware", "SimpleWebApp.Middleware\SimpleWebApp.Middleware.csproj", "{8440D200-AB71-4C82-994B-A7465A98F577}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleWebApp.Middleware", "SimpleWebApp.Middleware\SimpleWebApp.Middleware.csproj", "{8440D200-AB71-4C82-994B-A7465A98F577}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebApp.Storage.EntityFramework", "SimpleWebApp.Storage.EntityFramework\SimpleWebApp.Storage.EntityFramework.csproj", "{CFD48B9A-7B44-44C3-B785-6594A485CE7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleWebApp.Storage.Models", "SimpleWebApp.Storage.Models\SimpleWebApp.Storage.Models.csproj", "{DD28913C-A274-4010-A599-4FDEB16F1E35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{8440D200-AB71-4C82-994B-A7465A98F577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8440D200-AB71-4C82-994B-A7465A98F577}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8440D200-AB71-4C82-994B-A7465A98F577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD48B9A-7B44-44C3-B785-6594A485CE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD48B9A-7B44-44C3-B785-6594A485CE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD48B9A-7B44-44C3-B785-6594A485CE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD48B9A-7B44-44C3-B785-6594A485CE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD28913C-A274-4010-A599-4FDEB16F1E35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD28913C-A274-4010-A599-4FDEB16F1E35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD28913C-A274-4010-A599-4FDEB16F1E35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD28913C-A274-4010-A599-4FDEB16F1E35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
