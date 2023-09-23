@@ -12,7 +12,7 @@ namespace SimpleWebApp.Storage.EntityFramework
         public DatabaseContext(DatabaseConnectionOptions connectionOptions)
         {
             _connectionOptions = connectionOptions;
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
