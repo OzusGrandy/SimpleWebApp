@@ -122,12 +122,12 @@ namespace SimpleWebApp.BusinessLogic
 
         private string GetSortingType(SortBy sortBy)
         {
-            switch (sortBy)
+            return sortBy switch
             {
-                case SortBy.updatedAt: return "updatedAt";
-                case SortBy.createdAt: return "createdAt";
-                default: return "createdAt";
-            }
+                SortBy.updatedAt => "updatedAt",
+                SortBy.createdAt => "createdAt",
+                _ => "createdAt"
+            };
         }
     }
 }
