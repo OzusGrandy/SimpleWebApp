@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EmployeeModels;
-using System.Linq;
 
 
 namespace SimpleWebApp.Storage
@@ -17,38 +16,82 @@ namespace SimpleWebApp.Storage
 
         public Employee Add(EmployeeCreate create)
         {
-            using (DatabaseContext db = new DatabaseContext(_options))
+            using (var connection = new SqliteConnection(_options.ConnectionString))
             {
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand
+                    ("INSERT INTO employee (id, firstName, lastName, birthday, createdAt, updatedAt) " +
+                    "VALUES ($id, $firstName, $lastName, $birthday, $createdAt, $updatedAt)", connection);
+
+                var id = Guid.NewGuid();
                 var currentDate = DateTime.Now;
-                var employee = new Employee
+                command.Parameters.AddWithValue("$id", id.ToString());
+                command.Parameters.AddWithValue("$firstName", create.FirstName);
+                command.Parameters.AddWithValue("$lastName", create.LastName);
+                command.Parameters.AddWithValue("$birthday", ConvertToUnixTime(create.Birthday));
+                command.Parameters.AddWithValue("$createdAt", ConvertToUnixTime(currentDate));
+                command.Parameters.AddWithValue("$updatedAt", ConvertToUnixTime(currentDate));
+                command.ExecuteNonQuery();
+
+                return new Employee
                 {
-                    Id = Guid.NewGuid(),
+                    Id = id,
                     FirstName = create.FirstName,
                     LastName = create.LastName,
                     Birthday = create.Birthday,
                     CreatedAt = currentDate,
                     UpdatedAt = currentDate
                 };
-                db.Employee.Add(ConvertToDatabaseEmployee(employee));
-                db.SaveChanges();
-                return employee;
             }
         }
 
         public void Delete(Guid id)
         {
-            using (DatabaseContext db = new DatabaseContext(_options))
+            using (var connection = new SqliteConnection(_options.ConnectionString))
             {
-                db.Employee.Remove(ConvertToDatabaseEmployee(Get(id)));
-                db.SaveChanges();
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand($"DELETE FROM employee WHERE id=$id", connection);
+
+                command.Parameters.AddWithValue("$id", id.ToString());
+
+                command.ExecuteNonQuery();
             }
         }
 
         public Employee? Get(Guid id)
         {
-            using (DatabaseContext db = new DatabaseContext(_options))
+            using (var connection = new SqliteConnection(_options.ConnectionString))
             {
-                return ConvertToEmployee(db.Employee.Find(id.ToString()));
+                connection.Open();
+
+                SqliteCommand command = new SqliteCommand("SELECT * FROM employee WHERE id=$id", connection);
+
+                command.Parameters.AddWithValue("$id", id.ToString());
+
+                SqliteDataReader reader = command.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    return null;
+                }
+
+                reader.Read();
+
+                var employee = new Employee
+                {
+                    Id = id,
+                    FirstName = reader.GetString(1),
+                    LastName = reader.GetString(2),
+                    Birthday = ConvertToDateTime(reader.GetInt32(3)),
+                    CreatedAt = ConvertToDateTime(reader.GetInt32(4)),
+                    UpdatedAt = ConvertToDateTime(reader.GetInt32(5))
+                };
+
+                reader.Close();
+
+                return employee;
             }
         }
 
@@ -56,19 +99,37 @@ namespace SimpleWebApp.Storage
         {
             var existingEmployee = Get(model.Id);
 
-            using (DatabaseContext db = new DatabaseContext(_options))
+            using (var connection = new SqliteConnection(_options.ConnectionString))
             {
+                connection.Open();
+                SqliteCommand command = new SqliteCommand(
+                    "UPDATE employee " +
+                    "SET " +
+                    "firstName = $firstName, " +
+                    "lastName = $lastName, " +
+                    "birthday = $birthday, " +
+                    "updatedAt = $updatedAt " +
+                    "WHERE id = $id", connection);
+
                 var currentDate = DateTime.Now;
+                command.Parameters.AddWithValue("$id", model.Id.ToString());
+                command.Parameters.AddWithValue("$firstName", model.FirstName);
+                command.Parameters.AddWithValue("$lastName", model.LastName);
+                command.Parameters.AddWithValue("$birthday", ConvertToUnixTime(model.Birthday));
+                command.Parameters.AddWithValue("$updatedAt", ConvertToUnixTime(currentDate));
+                command.ExecuteNonQuery();
 
-                existingEmployee.FirstName = model.FirstName;
-                existingEmployee.LastName = model.LastName;
-                existingEmployee.Birthday = model.Birthday;
-                existingEmployee.UpdatedAt = currentDate;
+                var employee = new Employee
+                {
+                    Id = model.Id,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Birthday = model.Birthday,
+                    CreatedAt = existingEmployee.CreatedAt,
+                    UpdatedAt = currentDate
+                };
 
-                db.Employee.Update(ConvertToDatabaseEmployee(existingEmployee));
-                db.SaveChanges();
-
-                return existingEmployee;
+                return employee;
             }
         }
 
@@ -80,16 +141,36 @@ namespace SimpleWebApp.Storage
             var sortingType = GetSortingType(getPage.SortBy);
             var resultList = new List<Employee>();
 
-            using (DatabaseContext db = new DatabaseContext(_options))
+            using (var connection = new SqliteConnection(_options.ConnectionString))
             {
-                var list = db.Employee.AsQueryable().OrderBy(x => x.CreatedAt).Skip(offset).Take(limit).ToList();
+                connection.Open();
 
-                foreach (var employee in list)
+                SqliteCommand commandPaging = new SqliteCommand($"SELECT * FROM employee ORDER BY {sortingType} {sortDirectionTypeString} LIMIT {limit} OFFSET {offset}", connection);
+
+                SqliteDataReader reader = commandPaging.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    resultList.Add(ConvertToEmployee(employee));
+                    var employee = new Employee
+                    {
+                        Id = Guid.Parse(reader.GetString(0)),
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Birthday = ConvertToDateTime(reader.GetInt32(3)),
+                        CreatedAt = ConvertToDateTime(reader.GetInt32(4)),
+                        UpdatedAt = ConvertToDateTime(reader.GetInt32(5))
+                    };
+
+                    resultList.Add(employee);
                 }
 
-                var totalCount = db.Employee.Count();
+                SqliteCommand commandTotalCount = new SqliteCommand($"SELECT count(id) FROM employee", connection);
+
+                SqliteDataReader totalCountReader = commandTotalCount.ExecuteReader();
+
+                totalCountReader.Read();
+
+                var totalCount = totalCountReader.GetInt64(0);
 
                 return new PagingResult<Employee>(resultList, totalCount);
             }
@@ -113,32 +194,6 @@ namespace SimpleWebApp.Storage
                 case SortBy.createdAt: return "createdAt";
                 default: return "createdAt";
             }
-        }
-
-        private DatabaseEmployee ConvertToDatabaseEmployee(Employee employee)
-        {
-            return new DatabaseEmployee()
-            {
-                Id = employee.Id.ToString(),
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Birthday = ConvertToUnixTime(employee.Birthday),
-                CreatedAt = ConvertToUnixTime(employee.CreatedAt),
-                UpdatedAt = ConvertToUnixTime(employee.UpdatedAt)
-            };
-        }
-
-        private Employee ConvertToEmployee(DatabaseEmployee employee)
-        {
-            return new Employee()
-            {
-                Id = Guid.Parse(employee.Id),
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Birthday = ConvertToDateTime(employee.Birthday),
-                CreatedAt = ConvertToDateTime(employee.CreatedAt),
-                UpdatedAt = ConvertToDateTime(employee.UpdatedAt)
-            };
         }
     }
 }
