@@ -3,6 +3,7 @@ using SimpleWebApp.Storage;
 using SimpleWebApp.BusinessLogic;
 using SimpleWebApp.Middleware;
 using Microsoft.Extensions.Options;
+using SimpleWebApp.Storage.EntityFramework;
 
 namespace SimpleWebApp.Api
 {
