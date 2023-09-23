@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.Models;
 
-namespace SimpleWebApp.Storage
+namespace SimpleWebApp.Storage.RawSql
 {
     public class EmployeeRepository : IEmployeeRepository
     {

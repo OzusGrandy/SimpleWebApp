@@ -4,6 +4,7 @@ using SimpleWebApp.BusinessLogic;
 using SimpleWebApp.Middleware;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.Storage.EntityFramework;
+using SimpleWebApp.Storage.RawSql;
 
 namespace SimpleWebApp.Api
 {

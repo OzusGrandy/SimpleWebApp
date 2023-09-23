@@ -1,7 +1,7 @@
 ﻿using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.Models;
 
-namespace SimpleWebApp.Storage
+namespace SimpleWebApp.Storage.RawSql
 {
     public interface IEmployeeRepository
     {
