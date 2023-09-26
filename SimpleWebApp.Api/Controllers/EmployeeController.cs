@@ -17,17 +17,17 @@ namespace SimpleWebApp.Api.Controllers
         }
 
         [HttpGet]
-        public PagingResult<EmployeeDto> GetPage([FromQuery] GetEmployeePageDto getPage)
+        public async Task<PagingResult<EmployeeDto>> GetPage([FromQuery] GetEmployeePageDto getPage, CancellationToken cancellationToken)
         {
-            var result = _manager.GetPage(getPage);
+            var result = await _manager.GetPage(getPage, cancellationToken);
 
             return result;
         }
 
         [HttpGet("{id}")]
-        public ActionResult<EmployeeDto> GetById([FromRoute] Guid id)
+        public async Task<ActionResult<EmployeeDto>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            var result = _manager.Get(id);
+            var result = await _manager.Get(id, cancellationToken);
 
             if (result == null)
             {
@@ -38,28 +38,32 @@ namespace SimpleWebApp.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<EmployeeDto> Add([FromBody] EmployeeCreateDto data)
+        public async Task<ActionResult<EmployeeDto>> Add([FromBody] EmployeeCreateDto data, CancellationToken cancellationToken)
         {
-            var result = _manager.Add(data);
+            var result = await _manager.Add(data, cancellationToken);
             return Created($"employee/{result.Id:N}", result);
         }
 
         [HttpPatch("{id:guid}")]
-        public EmployeeDto Update([FromRoute] Guid id, [FromBody] EmployeeCreateDto data)
+        public async Task<EmployeeDto> Update(
+            [FromRoute] Guid id, 
+            [FromBody] EmployeeCreateDto data, 
+            CancellationToken cancellationToken)
         {
-            return _manager.Update(new EmployeeUpdateDto
+            return await _manager.Update(new EmployeeUpdateDto
             {
                 Id = id,
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 Birthday = data.Birthday
-            });
+            }, 
+            cancellationToken);
         }
 
         [HttpDelete("{id:guid}")]
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            _manager.Delete(id);
+            await _manager.Delete(id, cancellationToken);
             return NoContent();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.CommonModels;
@@ -21,7 +22,7 @@ namespace SimpleWebApp.BusinessLogic
             _databaseContext = dbContext;
         }
 
-        public EmployeeDto Add(EmployeeCreateDto createDto)
+        public async Task<EmployeeDto> Add(EmployeeCreateDto createDto, CancellationToken cancellationToken)
         {
             new EmployeeChangeDto.Validator(_validationOptions).ValidateAndThrow(createDto);
 
@@ -37,17 +38,17 @@ namespace SimpleWebApp.BusinessLogic
                 UpdatedAt = ConvertToUnixTime(currentDate)
             };
 
-            _databaseContext.Employee.Add(employee);
-            _databaseContext.SaveChanges();
+            await _databaseContext.Employee.AddAsync(employee, cancellationToken);
+            await _databaseContext.SaveChangesAsync(cancellationToken);
 
             return EmployeeDto.FromEntityModel(employee);
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id, CancellationToken cancellationToken)
         {
-            var employee = _databaseContext.Employee
+            var employee = await _databaseContext.Employee
                 .Where(x => x.Id == id.ToString())
-                .SingleOrDefault();
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (employee == null)
             {
@@ -55,14 +56,14 @@ namespace SimpleWebApp.BusinessLogic
             }
 
             _databaseContext.Employee.Remove(employee);
-            _databaseContext.SaveChanges();
+            await _databaseContext.SaveChangesAsync(cancellationToken);
         }
 
-        public EmployeeDto Get(Guid id)
+        public async Task<EmployeeDto> Get(Guid id, CancellationToken cancellationToken)
         {
-            var employee = _databaseContext.Employee
+            var employee = await _databaseContext.Employee
                 .Where(x => x.Id == id.ToString())
-                .SingleOrDefault();
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (employee == null)
             {
@@ -72,15 +73,15 @@ namespace SimpleWebApp.BusinessLogic
             return EmployeeDto.FromEntityModel(employee);
         }
 
-        public EmployeeDto Update(EmployeeUpdateDto model)
+        public async Task<EmployeeDto> Update(EmployeeUpdateDto model, CancellationToken cancellationToken)
         {
             new EmployeeChangeDto.Validator(_validationOptions).ValidateAndThrow(model);
 
             var currentDate = DateTime.Now;
 
-            var employee = _databaseContext.Employee
+            var employee = await _databaseContext.Employee
                 .Where(x => x.Id == model.Id.ToString())
-                .SingleOrDefault();
+                .SingleOrDefaultAsync(cancellationToken);
 
             if (employee == null)
             {
@@ -92,25 +93,25 @@ namespace SimpleWebApp.BusinessLogic
             employee.Birthday = ConvertToUnixTime(model.Birthday);
             employee.UpdatedAt = ConvertToUnixTime(currentDate);
 
-            _databaseContext.SaveChanges();
+            await _databaseContext.SaveChangesAsync(cancellationToken);
 
             return EmployeeDto.FromEntityModel(employee);
         }
 
-        public PagingResult<EmployeeDto> GetPage(GetEmployeePageDto getPage)
+        public async Task<PagingResult<EmployeeDto>> GetPage(GetEmployeePageDto getPage, CancellationToken cancellationToken)
         {
             var limit = getPage.PageConunt;
             var offset = getPage.Page * limit;
             var sortDirectionTypeString = getPage.SortDirection == SortDirectionType.Asc ? "asc" : "desc";
             var sortingType = GetSortingType(getPage.SortBy);
 
-            var list = _databaseContext.Employee
+            var list = await _databaseContext.Employee
                 .AsQueryable()
                 .OrderBy(x => x.CreatedAt)
                 .Skip(offset).Take(limit)
-                .ToList();
+                .ToListAsync(cancellationToken);
 
-            var totalCount = _databaseContext.Employee.Count();
+            var totalCount = await _databaseContext.Employee.CountAsync(cancellationToken);
 
             return new PagingResult<EmployeeDto>(list.Select(x => EmployeeDto.FromEntityModel(x)).ToArray(), totalCount);
         }
