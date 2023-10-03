@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using SimpleWebApp.BusinessLogic;
 using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.CommonModels;
@@ -9,17 +10,21 @@ namespace SimpleWebApp.Api.Controllers
     [Route("employees")]
     public class EmployeeController : Controller
     {
-        private readonly EmployeeManager _manager;
+        private readonly IMediator _mediator;
 
-        public EmployeeController(EmployeeManager manager)
+        public EmployeeController(IMediator mediator)
         {
-            _manager = manager;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<PagingResult<EmployeeDto>> GetPage([FromQuery] GetEmployeePageDto getPage, CancellationToken cancellationToken)
         {
-            var result = await _manager.GetPage(getPage, cancellationToken);
+            var result = await _mediator.Send(new BusinessLogic.Cqrs.GetPage.Query()
+            {
+                EmployeePage = getPage
+            }, 
+            cancellationToken);
 
             return result;
         }
@@ -27,7 +32,7 @@ namespace SimpleWebApp.Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeDto>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            var result = await _manager.Get(id, cancellationToken);
+            var result = await _mediator.Send(new BusinessLogic.Cqrs.Get.Query() { Id = id }, cancellationToken);
 
             if (result == null)
             {
@@ -40,7 +45,7 @@ namespace SimpleWebApp.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<EmployeeDto>> Add([FromBody] EmployeeCreateDto data, CancellationToken cancellationToken)
         {
-            var result = await _manager.Add(data, cancellationToken);
+            var result = await _mediator.Send(new BusinessLogic.Cqrs.Create.Command() { EmployeeCreate = data }, cancellationToken);
             return Created($"employee/{result.Id:N}", result);
         }
 
@@ -50,20 +55,23 @@ namespace SimpleWebApp.Api.Controllers
             [FromBody] EmployeeCreateDto data, 
             CancellationToken cancellationToken)
         {
-            return await _manager.Update(new EmployeeUpdateDto
+            return await _mediator.Send(new BusinessLogic.Cqrs.Update.Command()
             {
-                Id = id,
-                FirstName = data.FirstName,
-                LastName = data.LastName,
-                Birthday = data.Birthday
-            }, 
+                EmployeeUpdate = new EmployeeUpdateDto
+                {
+                    Id = id,
+                    FirstName = data.FirstName,
+                    LastName = data.LastName,
+                    Birthday = data.Birthday
+                }
+            },
             cancellationToken);
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
-            await _manager.Delete(id, cancellationToken);
+            await _mediator.Send(new BusinessLogic.Cqrs.Delete.Command() { Id = id }, cancellationToken);
             return NoContent();
         }
     }

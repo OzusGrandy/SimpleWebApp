@@ -5,6 +5,7 @@ using SimpleWebApp.Middleware;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.Storage.EntityFramework;
 using SimpleWebApp.Storage.RawSql;
+using MediatR;
 
 namespace SimpleWebApp.Api
 {
@@ -17,9 +18,9 @@ namespace SimpleWebApp.Api
             builder.Services.AddControllers();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(MapperProfile));
+            builder.Services.AddMediatR(typeof(AssemblyMarker));
             builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddConsole().SetMinimumLevel(LogLevel.Debug));
             builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
-            builder.Services.AddTransient<EmployeeManager>();
             builder.Services.AddScoped<DatabaseContext>(sp => 
             {
                 var options = sp.GetRequiredService<IOptions<DatabaseConnectionOptions>>();
@@ -28,6 +29,7 @@ namespace SimpleWebApp.Api
             builder.Services.Configure<AppConfigModel>(builder.Configuration.GetSection(nameof(AppConfigModel)));
             builder.Services.Configure<DatabaseConnectionOptions>(builder.Configuration.GetSection("DatabaseConnection"));
             builder.Services.Configure<ValidationOptions>(builder.Configuration.GetSection("ValidationOptions"));
+
 
             var app = builder.Build();
 
