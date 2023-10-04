@@ -1,8 +1,8 @@
 ﻿using SimpleWebApp.CommonModels;
 
-namespace SimpleWebApp.BusinessLogic.Models
+namespace SimpleWebApp.BusinessLogic.Employee
 {
-    public class GetEmployeePageDto
+    public class GetEmployeePage
     {
         public int Page { get; set; }
         public int PageConunt { get; set; }

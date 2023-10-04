@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 
-namespace SimpleWebApp.BusinessLogic.Models
+namespace SimpleWebApp.BusinessLogic.Employee
 {
-    public class EmployeeChangeDto
+    public class EmployeeChange
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime Birthday { get; set; }
 
-        public class Validator : AbstractValidator<EmployeeChangeDto>
+        public class Validator : AbstractValidator<EmployeeChange>
         {
             public Validator(ValidationOptions validationOptions)
             {

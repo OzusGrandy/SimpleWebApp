@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Options;
-using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.Storage.EntityFramework;
 using SimpleWebApp.Storage.Models;
 
-namespace SimpleWebApp.BusinessLogic.Cqrs.Create
+namespace SimpleWebApp.BusinessLogic.Employee.Create
 {
-    public class CommandHandler : IRequestHandler<Command, EmployeeDto>
+    public class CommandHandler : IRequestHandler<Command, Employee>
     {
         private readonly DatabaseContext _dbContext;
         private readonly ValidationOptions _validationOptions;
@@ -18,9 +17,9 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Create
             _validationOptions = validationOptions.Value;
         }
 
-        public async Task<EmployeeDto> Handle(Command command, CancellationToken cancellationToken)
+        public async Task<Employee> Handle(Command command, CancellationToken cancellationToken)
         {
-            new EmployeeChangeDto.Validator(_validationOptions).ValidateAndThrow(command.EmployeeCreate);
+            new EmployeeChange.Validator(_validationOptions).ValidateAndThrow(command.EmployeeCreate);
 
             var currentDate = DateTime.Now;
 
@@ -37,7 +36,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Create
             await _dbContext.Employee.AddAsync(employee, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return EmployeeDto.FromEntityModel(employee);
+            return Employee.FromEntityModel(employee);
         }
     }
 }

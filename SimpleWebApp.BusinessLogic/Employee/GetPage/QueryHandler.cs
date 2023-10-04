@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EntityFramework;
 using SimpleWebApp.Storage.Models;
 
-namespace SimpleWebApp.BusinessLogic.Cqrs.GetPage
+namespace SimpleWebApp.BusinessLogic.Employee.GetPage
 {
-    public class QueryHandler : IRequestHandler<Query, PagingResult<EmployeeDto>>
+    public class QueryHandler : IRequestHandler<Query, PagingResult<Employee>>
     {
         private readonly DatabaseContext _dbContext;
 
@@ -16,7 +15,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.GetPage
             _dbContext = dbContext;
         }
 
-        public async Task<PagingResult<EmployeeDto>> Handle(Query query, CancellationToken cancellationToken)
+        public async Task<PagingResult<Employee>> Handle(Query query, CancellationToken cancellationToken)
         {
             var limit = query.EmployeePage.PageConunt;
             var offset = query.EmployeePage.Page * limit;
@@ -31,7 +30,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.GetPage
 
             var totalCount = await _dbContext.Employee.CountAsync(cancellationToken);
 
-            return new PagingResult<EmployeeDto>(list.Select(x => EmployeeDto.FromEntityModel(x)).ToArray(), totalCount);
+            return new PagingResult<Employee>(list.Select(x => Employee.FromEntityModel(x)).ToArray(), totalCount);
         }
 
         private string GetSortingType(SortBy sortBy)

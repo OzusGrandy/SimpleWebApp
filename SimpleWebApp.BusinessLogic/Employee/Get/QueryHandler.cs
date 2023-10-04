@@ -1,12 +1,11 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.Middleware.CustomExceptions;
 using SimpleWebApp.Storage.EntityFramework;
 
-namespace SimpleWebApp.BusinessLogic.Cqrs.Get
+namespace SimpleWebApp.BusinessLogic.Employee.Get
 {
-    public class QueryHandler : IRequestHandler<Query, EmployeeDto>
+    public class QueryHandler : IRequestHandler<Query, Employee>
     {
         private readonly DatabaseContext _dbContext;
 
@@ -15,7 +14,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Get
             _dbContext = dbContext;
         }
 
-        public async Task<EmployeeDto> Handle(Query query, CancellationToken cancellationToken)
+        public async Task<Employee> Handle(Query query, CancellationToken cancellationToken)
         {
             var employee = await _dbContext.Employee
                 .Where(x => x.Id == query.Id.ToString())
@@ -26,7 +25,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Get
                 throw new NoFoundException();
             }
 
-            return EmployeeDto.FromEntityModel(employee);
+            return Employee.FromEntityModel(employee);
         }
     }
 }
