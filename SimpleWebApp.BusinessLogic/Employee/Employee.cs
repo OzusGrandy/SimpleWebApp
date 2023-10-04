@@ -1,8 +1,8 @@
 ﻿using SimpleWebApp.Storage.Models;
 
-namespace SimpleWebApp.BusinessLogic.Models
+namespace SimpleWebApp.BusinessLogic.Employee
 {
-    public class EmployeeDto
+    public class Employee
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }
@@ -11,9 +11,9 @@ namespace SimpleWebApp.BusinessLogic.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public static EmployeeDto FromEntityModel(DatabaseEmployee employee)
+        public static Employee FromEntityModel(DatabaseEmployee employee)
         {
-            return new EmployeeDto
+            return new Employee
             {
                 Id = Guid.Parse(employee.Id),
                 FirstName = employee.FirstName,

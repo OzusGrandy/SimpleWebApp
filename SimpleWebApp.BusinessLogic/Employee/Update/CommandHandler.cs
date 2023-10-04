@@ -2,13 +2,12 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.Middleware.CustomExceptions;
 using SimpleWebApp.Storage.EntityFramework;
 
-namespace SimpleWebApp.BusinessLogic.Cqrs.Update
+namespace SimpleWebApp.BusinessLogic.Employee.Update
 {
-    public class CommandHandler : IRequestHandler<Command, EmployeeDto>
+    public class CommandHandler : IRequestHandler<Command, Employee>
     {
         private readonly DatabaseContext _dbContext;
         private readonly ValidationOptions _validationOptions;
@@ -19,9 +18,9 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Update
             _validationOptions = validationOptions.Value;
         }
 
-        public async Task<EmployeeDto> Handle(Command command, CancellationToken cancellationToken)
+        public async Task<Employee> Handle(Command command, CancellationToken cancellationToken)
         {
-            new EmployeeChangeDto.Validator(_validationOptions).ValidateAndThrow(command.EmployeeUpdate);
+            new EmployeeChange.Validator(_validationOptions).ValidateAndThrow(command.EmployeeUpdate);
 
             var currentDate = DateTime.Now;
 
@@ -41,7 +40,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Update
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return EmployeeDto.FromEntityModel(employee);
+            return Employee.FromEntityModel(employee);
         }
     }
 }

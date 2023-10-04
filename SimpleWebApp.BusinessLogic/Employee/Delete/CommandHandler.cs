@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.BusinessLogic.Models;
 using SimpleWebApp.Storage.EntityFramework;
 
-namespace SimpleWebApp.BusinessLogic.Cqrs.Delete
+namespace SimpleWebApp.BusinessLogic.Employee.Delete
 {
-    public class CommandHandler : IRequestHandler<Command, EmployeeDto>
+    public class CommandHandler : IRequestHandler<Command, Employee>
     {
         private readonly DatabaseContext _dbContext;
         public CommandHandler(DatabaseContext dbContext)
@@ -13,7 +12,7 @@ namespace SimpleWebApp.BusinessLogic.Cqrs.Delete
             _dbContext = dbContext;
         }
 
-        public async Task<EmployeeDto> Handle(Command command, CancellationToken cancellationToken)
+        public async Task<Employee> Handle(Command command, CancellationToken cancellationToken)
         {
             var employee = await _dbContext.Employee
                 .Where(x => x.Id == command.Id.ToString())
