@@ -1,5 +1,5 @@
 ﻿using SimpleWebApp.CommonModels;
-using SimpleWebApp.Storage.Models;
+using SimpleWebApp.Storage.Models.Employees;
 
 namespace SimpleWebApp.Storage.RawSql
 {

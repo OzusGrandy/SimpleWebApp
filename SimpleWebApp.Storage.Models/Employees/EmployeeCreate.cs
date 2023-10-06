@@ -1,8 +1,7 @@
-﻿namespace SimpleWebApp.Storage.Models
+﻿namespace SimpleWebApp.Storage.Models.Employees
 {
-    public class EmployeeUpdate
+    public class EmployeeCreate
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime Birthday { get; set; }

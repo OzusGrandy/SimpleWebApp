@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SimpleWebApp.CommonModels;
 using SimpleWebApp.Middleware.CustomExceptions;
 using SimpleWebApp.Storage.EntityFramework;
 
@@ -35,8 +36,8 @@ namespace SimpleWebApp.BusinessLogic.Employee.Update
 
             employee.FirstName = command.EmployeeUpdate.FirstName;
             employee.LastName = command.EmployeeUpdate.LastName;
-            employee.Birthday = ConvertDate.ConvertToUnixTime(command.EmployeeUpdate.Birthday);
-            employee.UpdatedAt = ConvertDate.ConvertToUnixTime(currentDate);
+            employee.Birthday = CommonMethods.ConvertToUnixTime(command.EmployeeUpdate.Birthday);
+            employee.UpdatedAt = CommonMethods.ConvertToUnixTime(currentDate);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -7,6 +7,6 @@ namespace SimpleWebApp.BusinessLogic.Employee
         public int Page { get; set; }
         public int PageConunt { get; set; }
         public SortDirectionType SortDirection { get; set; }
-        public Storage.Models.SortBy SortBy { get; set; }
+        public SortBy SortBy { get; set; }
     }
 }

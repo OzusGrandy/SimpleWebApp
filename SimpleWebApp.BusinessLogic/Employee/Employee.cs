@@ -1,4 +1,5 @@
-﻿using SimpleWebApp.Storage.Models;
+﻿using SimpleWebApp.CommonModels;
+using SimpleWebApp.Storage.Models.Employees;
 
 namespace SimpleWebApp.BusinessLogic.Employee
 {
@@ -18,15 +19,10 @@ namespace SimpleWebApp.BusinessLogic.Employee
                 Id = Guid.Parse(employee.Id),
                 FirstName = employee.FirstName,
                 LastName = employee.LastName,
-                Birthday = ConvertToDateTime(employee.Birthday),
-                CreatedAt = ConvertToDateTime(employee.CreatedAt),
-                UpdatedAt = ConvertToDateTime(employee.UpdatedAt)
+                Birthday = CommonMethods.ConvertToDateTime(employee.Birthday),
+                CreatedAt = CommonMethods.ConvertToDateTime(employee.CreatedAt),
+                UpdatedAt = CommonMethods.ConvertToDateTime(employee.UpdatedAt)
             };
-        }
-
-        private static DateTime ConvertToDateTime(long unixTime)
-        {
-            return DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
         }
     }
 }

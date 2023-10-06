@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EntityFramework;
-using SimpleWebApp.Storage.Models;
 
 namespace SimpleWebApp.BusinessLogic.Employee.GetPage
 {

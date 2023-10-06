@@ -1,4 +1,4 @@
-﻿namespace SimpleWebApp.Storage.Models
+﻿namespace SimpleWebApp.Storage.Models.Employees
 {
     public class Employee
     {

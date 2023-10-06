@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Options;
+using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EntityFramework;
-using SimpleWebApp.Storage.Models;
+using SimpleWebApp.Storage.Models.Employees;
 
 namespace SimpleWebApp.BusinessLogic.Employee.Create
 {
@@ -28,9 +29,9 @@ namespace SimpleWebApp.BusinessLogic.Employee.Create
                 Id = Guid.NewGuid().ToString(),
                 FirstName = command.EmployeeCreate.FirstName,
                 LastName = command.EmployeeCreate.LastName,
-                Birthday = ConvertDate.ConvertToUnixTime(command.EmployeeCreate.Birthday),
-                CreatedAt = ConvertDate.ConvertToUnixTime(currentDate),
-                UpdatedAt = ConvertDate.ConvertToUnixTime(currentDate)
+                Birthday = CommonMethods.ConvertToUnixTime(command.EmployeeCreate.Birthday),
+                CreatedAt = CommonMethods.ConvertToUnixTime(currentDate),
+                UpdatedAt = CommonMethods.ConvertToUnixTime(currentDate)
             };
 
             await _dbContext.Employee.AddAsync(employee, cancellationToken);

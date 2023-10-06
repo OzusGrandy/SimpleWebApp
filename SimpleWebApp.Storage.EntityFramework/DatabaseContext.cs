@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.Storage.Models;
+using SimpleWebApp.Storage.Models.Employees;
 
 namespace SimpleWebApp.Storage.EntityFramework
 {
@@ -12,7 +12,6 @@ namespace SimpleWebApp.Storage.EntityFramework
         public DatabaseContext(DatabaseConnectionOptions connectionOptions)
         {
             _connectionOptions = connectionOptions;
-            //Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

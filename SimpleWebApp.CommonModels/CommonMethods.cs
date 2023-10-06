@@ -1,12 +1,15 @@
-﻿using SimpleWebApp.Storage.Models;
-
-namespace SimpleWebApp.BusinessLogic
+﻿namespace SimpleWebApp.CommonModels
 {
-    public class ConvertDate
+    public class CommonMethods
     {
         public static long ConvertToUnixTime(DateTime date)
         {
             return ((DateTimeOffset)date).ToUnixTimeSeconds();
+        }
+
+        public static DateTime ConvertToDateTime(long unixTime)
+        {
+            return DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
         }
 
         public static string GetSortingType(SortBy sortBy)

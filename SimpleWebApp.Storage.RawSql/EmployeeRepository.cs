@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
-using SimpleWebApp.Storage.Models;
+using SimpleWebApp.Storage.Models.Employees;
 
 namespace SimpleWebApp.Storage.RawSql
 {
@@ -28,9 +28,9 @@ namespace SimpleWebApp.Storage.RawSql
                 command.Parameters.AddWithValue("$id", id.ToString());
                 command.Parameters.AddWithValue("$firstName", create.FirstName);
                 command.Parameters.AddWithValue("$lastName", create.LastName);
-                command.Parameters.AddWithValue("$birthday", ConvertToUnixTime(create.Birthday));
-                command.Parameters.AddWithValue("$createdAt", ConvertToUnixTime(currentDate));
-                command.Parameters.AddWithValue("$updatedAt", ConvertToUnixTime(currentDate));
+                command.Parameters.AddWithValue("$birthday", CommonMethods.ConvertToUnixTime(create.Birthday));
+                command.Parameters.AddWithValue("$createdAt", CommonMethods.ConvertToUnixTime(currentDate));
+                command.Parameters.AddWithValue("$updatedAt", CommonMethods.ConvertToUnixTime(currentDate));
                 command.ExecuteNonQuery();
 
                 return new Employee
@@ -83,9 +83,9 @@ namespace SimpleWebApp.Storage.RawSql
                     Id = id,
                     FirstName = reader.GetString(1),
                     LastName = reader.GetString(2),
-                    Birthday = ConvertToDateTime(reader.GetInt32(3)),
-                    CreatedAt = ConvertToDateTime(reader.GetInt32(4)),
-                    UpdatedAt = ConvertToDateTime(reader.GetInt32(5))
+                    Birthday = CommonMethods.ConvertToDateTime(reader.GetInt32(3)),
+                    CreatedAt = CommonMethods.ConvertToDateTime(reader.GetInt32(4)),
+                    UpdatedAt = CommonMethods.ConvertToDateTime(reader.GetInt32(5))
                 };
 
                 reader.Close();
@@ -114,8 +114,8 @@ namespace SimpleWebApp.Storage.RawSql
                 command.Parameters.AddWithValue("$id", model.Id.ToString());
                 command.Parameters.AddWithValue("$firstName", model.FirstName);
                 command.Parameters.AddWithValue("$lastName", model.LastName);
-                command.Parameters.AddWithValue("$birthday", ConvertToUnixTime(model.Birthday));
-                command.Parameters.AddWithValue("$updatedAt", ConvertToUnixTime(currentDate));
+                command.Parameters.AddWithValue("$birthday", CommonMethods.ConvertToUnixTime(model.Birthday));
+                command.Parameters.AddWithValue("$updatedAt", CommonMethods.ConvertToUnixTime(currentDate));
                 command.ExecuteNonQuery();
 
                 var employee = new Employee
@@ -137,7 +137,7 @@ namespace SimpleWebApp.Storage.RawSql
             var limit = getPage.PageConunt;
             var offset = getPage.Page * limit;
             var sortDirectionTypeString = getPage.SortDirection == SortDirectionType.Asc ? "asc" : "desc";
-            var sortingType = GetSortingType(getPage.SortBy);
+            var sortingType = CommonMethods.GetSortingType(getPage.SortBy);
             var resultList = new List<Employee>();
 
             using (var connection = new SqliteConnection(_options.ConnectionString))
@@ -155,9 +155,9 @@ namespace SimpleWebApp.Storage.RawSql
                         Id = Guid.Parse(reader.GetString(0)),
                         FirstName = reader.GetString(1),
                         LastName = reader.GetString(2),
-                        Birthday = ConvertToDateTime(reader.GetInt32(3)),
-                        CreatedAt = ConvertToDateTime(reader.GetInt32(4)),
-                        UpdatedAt = ConvertToDateTime(reader.GetInt32(5))
+                        Birthday = CommonMethods.ConvertToDateTime(reader.GetInt32(3)),
+                        CreatedAt = CommonMethods.ConvertToDateTime(reader.GetInt32(4)),
+                        UpdatedAt = CommonMethods.ConvertToDateTime(reader.GetInt32(5))
                     };
 
                     resultList.Add(employee);
@@ -172,26 +172,6 @@ namespace SimpleWebApp.Storage.RawSql
                 var totalCount = totalCountReader.GetInt64(0);
 
                 return new PagingResult<Employee>(resultList, totalCount);
-            }
-        }
-
-        private long ConvertToUnixTime(DateTime date)
-        {
-            return ((DateTimeOffset)date).ToUnixTimeSeconds();
-        }
-
-        private DateTime ConvertToDateTime(long unixTime)
-        {
-            return DateTimeOffset.FromUnixTimeSeconds(unixTime).DateTime;
-        }
-
-        private string GetSortingType(SortBy sortBy)
-        {
-            switch (sortBy)
-            {
-                case SortBy.updatedAt: return "updatedAt";
-                case SortBy.createdAt: return "createdAt";
-                default: return "createdAt";
             }
         }
     }
