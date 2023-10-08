@@ -19,7 +19,7 @@ namespace SimpleWebApp.BusinessLogic.Employee.GetPage
             var limit = query.EmployeePage.PageConunt;
             var offset = query.EmployeePage.Page * limit;
             var sortDirectionTypeString = query.EmployeePage.SortDirection == SortDirectionType.Asc ? "asc" : "desc";
-            var sortingType = GetSortingType(query.EmployeePage.SortBy);
+            var sortingType = CommonMethods.GetSortingType(query.EmployeePage.SortBy);
 
             var list = await _dbContext.Employee
                 .AsQueryable()
@@ -30,16 +30,6 @@ namespace SimpleWebApp.BusinessLogic.Employee.GetPage
             var totalCount = await _dbContext.Employee.CountAsync(cancellationToken);
 
             return new PagingResult<Employee>(list.Select(x => Employee.FromEntityModel(x)).ToArray(), totalCount);
-        }
-
-        private string GetSortingType(SortBy sortBy)
-        {
-            return sortBy switch
-            {
-                SortBy.updatedAt => "updatedAt",
-                SortBy.createdAt => "createdAt",
-                _ => "createdAt"
-            };
         }
     }
 }

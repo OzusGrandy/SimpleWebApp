@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleWebApp.Storage.Models.Employees;
+using SimpleWebApp.Storage.Models.Projects;
 
 namespace SimpleWebApp.Storage.EntityFramework
 {
@@ -8,6 +9,7 @@ namespace SimpleWebApp.Storage.EntityFramework
         private readonly DatabaseConnectionOptions _connectionOptions;
 
         public DbSet<DatabaseEmployee> Employee => Set<DatabaseEmployee>();
+        public DbSet<DatabaseProject> Project => Set<DatabaseProject>();
 
         public DatabaseContext(DatabaseConnectionOptions connectionOptions)
         {

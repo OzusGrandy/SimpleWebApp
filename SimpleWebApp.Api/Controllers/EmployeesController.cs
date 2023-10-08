@@ -8,11 +8,11 @@ namespace SimpleWebApp.Api.Controllers
 {
     [ApiController]
     [Route("employees")]
-    public class EmployeeController : Controller
+    public class EmployeesController : Controller
     {
         private readonly IMediator _mediator;
 
-        public EmployeeController(IMediator mediator)
+        public EmployeesController(IMediator mediator)
         {
             _mediator = mediator;
         }
