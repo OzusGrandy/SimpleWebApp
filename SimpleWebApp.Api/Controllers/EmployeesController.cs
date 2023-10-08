@@ -47,7 +47,7 @@ namespace SimpleWebApp.Api.Controllers
         public async Task<ActionResult<Employee>> Add([FromBody] EmployeeCreate data, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new BusinessLogic.Employee.Create.Command() { EmployeeCreate = data }, cancellationToken);
-            return Created($"employee/{result.Id:N}", result);
+            return Created($"employees/{result.Id:N}", result);
         }
 
         [HttpPatch("{id:guid}")]
