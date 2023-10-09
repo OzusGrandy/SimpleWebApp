@@ -1,6 +1,4 @@
-﻿using SimpleWebApp.Storage.Models.Projects;
-
-namespace SimpleWebApp.Storage.Models.Employees
+﻿namespace SimpleWebApp.Storage.EntityFramework.Models
 {
     public class DatabaseEmployee
     {

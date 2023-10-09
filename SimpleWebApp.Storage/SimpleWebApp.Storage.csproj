@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\SimpleWebApp.CommonModels\SimpleWebApp.CommonModels.csproj" />
-	  <ProjectReference Include="..\SimpleWebApp.Storage.Models\SimpleWebApp.Storage.Models.csproj" />
 	</ItemGroup>
 
 </Project>

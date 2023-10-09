@@ -16,7 +16,7 @@ namespace SimpleWebApp.Api
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options => options.CustomSchemaIds(type => type.ToString()));
             builder.Services.AddMediatR(typeof(AssemblyMarker));
             builder.Services.AddLogging(loggingBuilder => loggingBuilder.AddConsole().SetMinimumLevel(LogLevel.Debug));
             builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();

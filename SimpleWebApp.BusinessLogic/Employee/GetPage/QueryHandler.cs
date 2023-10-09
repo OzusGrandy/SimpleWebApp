@@ -22,6 +22,7 @@ namespace SimpleWebApp.BusinessLogic.Employee.GetPage
             var sortingType = CommonMethods.GetSortingType(query.EmployeePage.SortBy);
 
             var list = await _dbContext.Employee
+                .Include(x => x.Projects)
                 .AsQueryable()
                 .OrderBy(x => x.CreatedAt)
                 .Skip(offset).Take(limit)
@@ -29,7 +30,7 @@ namespace SimpleWebApp.BusinessLogic.Employee.GetPage
 
             var totalCount = await _dbContext.Employee.CountAsync(cancellationToken);
 
-            return new PagingResult<Employee>(list.Select(x => Employee.FromEntityModel(x)).ToArray(), totalCount);
+            return new PagingResult<Employee>(list.Select(x => Employee.FromEntityModel(x, x.Projects)).ToArray(), totalCount);
         }
     }
 }

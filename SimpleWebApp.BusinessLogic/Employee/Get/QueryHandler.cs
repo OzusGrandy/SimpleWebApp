@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SimpleWebApp.Middleware.CustomExceptions;
 using SimpleWebApp.Storage.EntityFramework;
+using SimpleWebApp.Storage.EntityFramework.Models;
 
 namespace SimpleWebApp.BusinessLogic.Employee.Get
 {
@@ -25,7 +26,7 @@ namespace SimpleWebApp.BusinessLogic.Employee.Get
                 throw new NoFoundException();
             }
 
-            return Employee.FromEntityModel(employee);
+            return Employee.FromEntityModel(employee, Array.Empty<DatabaseProject>());
         }
     }
 }

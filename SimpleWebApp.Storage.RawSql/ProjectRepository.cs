@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
-using SimpleWebApp.Storage.Models.Projects;
+using SimpleWebApp.Storage.RawSql.Models.Projects;
 
 namespace SimpleWebApp.Storage.RawSql
 {

@@ -2,7 +2,7 @@
 using MediatR;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EntityFramework;
-using SimpleWebApp.Storage.Models.Projects;
+using SimpleWebApp.Storage.EntityFramework.Models;
 
 namespace SimpleWebApp.BusinessLogic.Project.Create
 {
@@ -17,15 +17,15 @@ namespace SimpleWebApp.BusinessLogic.Project.Create
 
         public async Task<Project> Handle(Command command, CancellationToken cancellationToken)
         {
-            new ProjectChange.Validator().ValidateAndThrow(command.ProjectCreate);
+            new ProjectChange.Validator().ValidateAndThrow(command);
 
             var currentDate = DateTime.Now;
 
             var project = new DatabaseProject
             {
                 Id = Guid.NewGuid().ToString(),
-                Name = command.ProjectCreate.Name,
-                Description = command.ProjectCreate.Description,
+                Name = command.Name,
+                Description = command.Description,
                 CreatedAt = CommonMethods.ConvertToUnixTime(currentDate),
                 UpdatedAt = CommonMethods.ConvertToUnixTime(currentDate)
             };

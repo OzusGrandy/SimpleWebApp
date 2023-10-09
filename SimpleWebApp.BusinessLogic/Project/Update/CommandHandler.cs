@@ -18,10 +18,10 @@ namespace SimpleWebApp.BusinessLogic.Project.Update
 
         public async Task<Project> Handle(Command command, CancellationToken cancellationToken)
         {
-            new ProjectChange.Validator().ValidateAndThrow(command.ProjectUpdate);
+            new ProjectChange.Validator().ValidateAndThrow(command.Changes);
 
             var project = await _dbContext.Project
-                .Where(x => x.Id == command.ProjectUpdate.Id.ToString())
+                .Where(x => x.Id == command.Id.ToString())
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (project == null)
@@ -31,8 +31,8 @@ namespace SimpleWebApp.BusinessLogic.Project.Update
 
             var currentDate = DateTime.Now;
 
-            project.Name = command.ProjectUpdate.Name;
-            project.Description = command.ProjectUpdate.Description;
+            project.Name = command.Changes.Name;
+            project.Description = command.Changes.Description;
             project.UpdatedAt = CommonMethods.ConvertToUnixTime(currentDate);
 
             await _dbContext.SaveChangesAsync(cancellationToken);

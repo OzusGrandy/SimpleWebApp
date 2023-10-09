@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Storage.EntityFramework;
-using SimpleWebApp.Storage.Models.Employees;
+using SimpleWebApp.Storage.EntityFramework.Models;
 
 namespace SimpleWebApp.BusinessLogic.Employee.Create
 {
@@ -20,24 +21,32 @@ namespace SimpleWebApp.BusinessLogic.Employee.Create
 
         public async Task<Employee> Handle(Command command, CancellationToken cancellationToken)
         {
-            new EmployeeChange.Validator(_validationOptions).ValidateAndThrow(command.EmployeeCreate);
+            new EmployeeChange.Validator(_validationOptions).ValidateAndThrow(command);
 
             var currentDate = DateTime.Now;
+
+            var projectIdStrings = command.ProjectIds.Select(x => x.ToString()).ToArray();
+
+            var projectsList = await _dbContext.Project
+                .Where(h => projectIdStrings.Contains(h.Id))
+                .ToListAsync(cancellationToken);
 
             var employee = new DatabaseEmployee
             {
                 Id = Guid.NewGuid().ToString(),
-                FirstName = command.EmployeeCreate.FirstName,
-                LastName = command.EmployeeCreate.LastName,
-                Birthday = CommonMethods.ConvertToUnixTime(command.EmployeeCreate.Birthday),
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                Birthday = CommonMethods.ConvertToUnixTime(command.Birthday),
+                Projects = projectsList,
                 CreatedAt = CommonMethods.ConvertToUnixTime(currentDate),
                 UpdatedAt = CommonMethods.ConvertToUnixTime(currentDate)
             };
 
             await _dbContext.Employee.AddAsync(employee, cancellationToken);
+
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return Employee.FromEntityModel(employee);
+            return Employee.FromEntityModel(employee, projectsList);
         }
     }
 }

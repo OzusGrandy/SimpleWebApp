@@ -1,5 +1,5 @@
 ﻿using SimpleWebApp.CommonModels;
-using SimpleWebApp.Storage.Models.Projects;
+using SimpleWebApp.Storage.EntityFramework.Models;
 
 namespace SimpleWebApp.BusinessLogic.Project
 {

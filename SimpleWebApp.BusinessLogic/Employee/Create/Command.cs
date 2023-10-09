@@ -2,8 +2,18 @@
 
 namespace SimpleWebApp.BusinessLogic.Employee.Create
 {
-    public class Command : IRequest<Employee>
+    public record Command : EmployeeChange, IRequest<Employee>
     {
-        public EmployeeCreate EmployeeCreate { get; set; }
+        public Command(
+        string firstName,
+        string lastName,
+        DateTime birthday,
+        ICollection<Guid> projectIds) 
+            : base(
+                firstName,
+                lastName,
+                birthday,
+                projectIds)
+        { }
     }
 }

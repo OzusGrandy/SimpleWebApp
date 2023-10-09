@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using SimpleWebApp.CommonModels;
 using SimpleWebApp.Middleware.CustomExceptions;
 using SimpleWebApp.Storage.EntityFramework;
+using SimpleWebApp.Storage.EntityFramework.Models;
 
 namespace SimpleWebApp.BusinessLogic.Employee.Update
 {
@@ -21,12 +22,12 @@ namespace SimpleWebApp.BusinessLogic.Employee.Update
 
         public async Task<Employee> Handle(Command command, CancellationToken cancellationToken)
         {
-            new EmployeeChange.Validator(_validationOptions).ValidateAndThrow(command.EmployeeUpdate);
+            new EmployeeChange.Validator(_validationOptions).ValidateAndThrow(command.Changes);
 
             var currentDate = DateTime.Now;
 
             var employee = await _dbContext.Employee
-                .Where(x => x.Id == command.EmployeeUpdate.Id.ToString())
+                .Where(x => x.Id == command.Id.ToString())
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (employee == null)
@@ -34,14 +35,19 @@ namespace SimpleWebApp.BusinessLogic.Employee.Update
                 throw new NoFoundException();
             }
 
-            employee.FirstName = command.EmployeeUpdate.FirstName;
-            employee.LastName = command.EmployeeUpdate.LastName;
-            employee.Birthday = CommonMethods.ConvertToUnixTime(command.EmployeeUpdate.Birthday);
+            //var projectsList = Employee.GetDatabaseProjectsList(command.Changes.AvailableProjects);
+
+            employee.FirstName = command.Changes.FirstName;
+            employee.LastName = command.Changes.LastName;
+            employee.Birthday = CommonMethods.ConvertToUnixTime(command.Changes.Birthday);
+            //employee.Projects = projectsList;
             employee.UpdatedAt = CommonMethods.ConvertToUnixTime(currentDate);
+
+            //_dbContext.Project.AttachRange(projectsList.ToArray());
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return Employee.FromEntityModel(employee);
+            return Employee.FromEntityModel(employee, Array.Empty<DatabaseProject>());
         }
     }
 }

@@ -16,6 +16,21 @@ namespace SimpleWebApp.Storage.EntityFramework.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
 
+            modelBuilder.Entity("DatabaseEmployeeDatabaseProject", b =>
+                {
+                    b.Property<string>("EmployeesId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProjectsId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EmployeesId", "ProjectsId");
+
+                    b.HasIndex("ProjectsId");
+
+                    b.ToTable("DatabaseEmployeeDatabaseProject");
+                });
+
             modelBuilder.Entity("SimpleWebApp.Storage.Models.Employees.DatabaseEmployee", b =>
                 {
                     b.Property<string>("Id")
@@ -65,6 +80,21 @@ namespace SimpleWebApp.Storage.EntityFramework.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Project");
+                });
+
+            modelBuilder.Entity("DatabaseEmployeeDatabaseProject", b =>
+                {
+                    b.HasOne("SimpleWebApp.Storage.Models.Employees.DatabaseEmployee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SimpleWebApp.Storage.Models.Projects.DatabaseProject", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

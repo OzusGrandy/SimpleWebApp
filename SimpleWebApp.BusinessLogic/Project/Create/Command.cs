@@ -2,8 +2,9 @@
 
 namespace SimpleWebApp.BusinessLogic.Project.Create
 {
-    public class Command : IRequest<Project>
+    public record Command : ProjectChange, IRequest<Project>
     {
-        public ProjectCreate ProjectCreate { get; set; }
+        public Command(string name, string description)
+                : base(name, description) { }
     }
 }

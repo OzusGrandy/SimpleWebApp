@@ -2,8 +2,5 @@
 
 namespace SimpleWebApp.BusinessLogic.Project.Update
 {
-    public class Command : IRequest<Project>
-    {
-        public ProjectUpdate ProjectUpdate { get; set; }
-    }
+    public record Command(Guid Id, ProjectChange Changes) : IRequest<Project>;
 }

@@ -2,8 +2,5 @@
 
 namespace SimpleWebApp.BusinessLogic.Employee.Update
 {
-    public class Command : IRequest<Employee>
-    {
-        public EmployeeUpdate EmployeeUpdate { get; set; }
-    }
+    public record Command(Guid Id, EmployeeChange Changes) : IRequest<Employee>;
 }

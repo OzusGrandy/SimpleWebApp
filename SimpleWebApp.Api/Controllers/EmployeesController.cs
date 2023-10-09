@@ -28,7 +28,9 @@ namespace SimpleWebApp.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<Employee>> GetById(
+            [FromRoute] Guid id, 
+            CancellationToken cancellationToken)
         {
             try
             {
@@ -44,29 +46,23 @@ namespace SimpleWebApp.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Employee>> Add([FromBody] EmployeeCreate data, CancellationToken cancellationToken)
+        public async Task<ActionResult<Employee>> Add(
+            [FromBody] BusinessLogic.Employee.Create.Command command, 
+            CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new BusinessLogic.Employee.Create.Command() { EmployeeCreate = data }, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
             return Created($"employees/{result.Id:N}", result);
         }
 
         [HttpPatch("{id:guid}")]
         public async Task<Employee> Update(
             [FromRoute] Guid id, 
-            [FromBody] EmployeeCreate data, 
+            [FromBody] EmployeeChange changes, 
             CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new BusinessLogic.Employee.Update.Command()
-            {
-                EmployeeUpdate = new EmployeeUpdate
-                {
-                    Id = id,
-                    FirstName = data.FirstName,
-                    LastName = data.LastName,
-                    Birthday = data.Birthday
-                }
-            },
-            cancellationToken);
+            return await _mediator.Send(
+                new BusinessLogic.Employee.Update.Command(id, changes),
+                cancellationToken);
         }
 
         [HttpDelete("{id:guid}")]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimpleWebApp.Storage.Models.Employees;
-using SimpleWebApp.Storage.Models.Projects;
+using SimpleWebApp.Storage.EntityFramework.Models;
 
 namespace SimpleWebApp.Storage.EntityFramework
 {

@@ -1,4 +1,4 @@
-﻿namespace SimpleWebApp.Storage.Models.Projects
+﻿namespace SimpleWebApp.Storage.RawSql.Models.Projects
 {
     public class ProjectUpdate
     {

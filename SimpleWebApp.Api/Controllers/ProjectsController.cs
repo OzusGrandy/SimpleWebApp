@@ -42,28 +42,23 @@ namespace SimpleWebApp.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Project>> Add([FromBody] ProjectCreate data, CancellationToken cancellationToken)
+        public async Task<ActionResult<Project>> Add(
+            [FromBody] BusinessLogic.Project.Create.Command command, 
+            CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new BusinessLogic.Project.Create.Command() { ProjectCreate = data }, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
             return Created($"projects/{result.Id:N}", result);
         }
 
         [HttpPatch("{id:guid}")]
         public async Task<Project> Update(
             [FromRoute] Guid id,
-            [FromBody] ProjectCreate data,
+            [FromBody] ProjectChange changes,
             CancellationToken cancellationToken)
         {
-            return await _mediator.Send(new BusinessLogic.Project.Update.Command()
-            {
-                ProjectUpdate = new ProjectUpdate
-                {
-                    Id = id,
-                    Name = data.Name,
-                    Description = data.Description,
-                }
-            },
-            cancellationToken);
+            return await _mediator.Send(
+                new BusinessLogic.Project.Update.Command(id, changes),
+                cancellationToken);
         }
 
         [HttpDelete("{id:guid}")]

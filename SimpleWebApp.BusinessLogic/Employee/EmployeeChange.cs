@@ -2,12 +2,12 @@
 
 namespace SimpleWebApp.BusinessLogic.Employee
 {
-    public class EmployeeChange
+    public record EmployeeChange(
+        string FirstName, 
+        string LastName, 
+        DateTime Birthday,
+        ICollection<Guid> ProjectIds)
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime Birthday { get; set; }
-
         public class Validator : AbstractValidator<EmployeeChange>
         {
             public Validator(ValidationOptions validationOptions)
